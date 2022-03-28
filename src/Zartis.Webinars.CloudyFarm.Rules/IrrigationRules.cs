@@ -18,7 +18,7 @@ namespace Zartis.Webinars.CloudyFarm.Rules
 {
     public static class IrrigationRules
     {
-        private const int HumidityPercentageThresholdForIrrigation = 40;
+        private static readonly int HumidityPercentageThresholdForIrrigation = Convert.ToInt32(Environment.GetEnvironmentVariable("MinimumHumidityPercentageThreshold"));
         private static readonly ServiceClient DeviceClient = ServiceClient.CreateFromConnectionString(Environment.GetEnvironmentVariable("IoTHubConnectionString"));
 
         [FunctionName("IrrigationRules")]
@@ -31,7 +31,7 @@ namespace Zartis.Webinars.CloudyFarm.Rules
             var measurement = JsonConvert.DeserializeObject<HumidityMeasurementEvent>(messageBody);
 
             var shouldIrrigate = measurement.Humidity < HumidityPercentageThresholdForIrrigation; // Business rule to decide whether irrigate or not.
-            log.LogInformation(shouldIrrigate ? "We should irrigate :>" : "Humidity is fine :)");
+            log.LogInformation($@"Measured humidity was {measurement.Humidity} % and our minimum humidity percentage is {HumidityPercentageThresholdForIrrigation} %. Therefore, should irrigate is {shouldIrrigate}.");
 
             if (shouldIrrigate)
             {
