@@ -1,5 +1,4 @@
 # Introduction
-
 This repository contains the code used for the demo carried out during the internal Zartis Webinar "Introduction to IoT solutions".
 
 # Video
